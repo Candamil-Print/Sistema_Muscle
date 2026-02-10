@@ -17,3 +17,4 @@ The system features a simple, modern interface.
 # Tecnologies
 - PHP
 - Tailwind
+- MySQL
