@@ -18,7 +18,8 @@ The system features a simple, modern interface.
 1. Clone the repository
 
 `https://github.com/Candamil-Print/Sistema_Muscle.git`
-2. Start the local server
+
+2. Run the local server in a properly configured environment.
 
 
 ***
