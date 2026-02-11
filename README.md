@@ -24,6 +24,7 @@ The system features a simple, modern interface.
 
 ***
 # Tecnologies
-- PHP
+- Node.JS
 - Tailwind
 - MySQL
+- React.JS
