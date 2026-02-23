@@ -1,0 +1,484 @@
+/* Producto.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #f3f4f6;
+}
+
+.producto-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.producto-main {
+  flex: 1;
+  margin-left: 15%;
+  padding: 4.5%;
+  width: 96rem;
+  background-color: #f9fafb;
+}
+
+/* Header */
+.producto-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.producto-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.producto-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.producto-new-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.producto-new-btn:hover {
+  background-color: #ea580c;
+}
+
+/* Filtros */
+.producto-filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.producto-search {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0 12px;
+}
+
+.search-icon {
+  color: #9ca3af;
+  margin-right: 8px;
+}
+
+.producto-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  font-size: 0.9rem;
+}
+
+.producto-select {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 0 12px;
+  font-size: 0.9rem;
+  color: #374151;
+  outline: none;
+  cursor: pointer;
+  min-width: 150px;
+  height: 42px;
+}
+
+/* Tabla */
+.producto-table-container {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.producto-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.producto-table th {
+  text-align: left;
+  padding: 16px 20px;
+  background-color: #f9fafb;
+  color: #4b5563;
+  font-weight: 500;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.producto-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #1f2937;
+}
+
+.producto-table tr:last-child td {
+  border-bottom: none;
+}
+
+.producto-type-badge {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+}
+
+.producto-stock-bar {
+  width: 100px;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.stock-bar-fill {
+  height: 100%;
+  background-color: #f97316;
+  border-radius: 9999px;
+}
+
+.producto-stock-text {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.producto-status-badge {
+  background-color: #10b981;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+}
+
+.producto-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.action-btn.edit {
+  color: #3b82f6;
+}
+
+.action-btn.edit:hover {
+  color: #2563eb;
+}
+
+.action-btn.delete {
+  color: #ef4444;
+}
+
+.action-btn.delete:hover {
+  color: #dc2626;
+}
+
+/* ===== ESTILOS DEL FORMULARIO MODAL ===== */
+
+/* Overlay */
+.producto-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal */
+.producto-form-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Header del modal */
+.form-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.form-modal-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+/* Formulario */
+.producto-create-form {
+  padding: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.form-group input::placeholder {
+  color: #9ca3af;
+}
+
+/* Grupo de imagen */
+.image-group {
+  margin-bottom: 24px;
+}
+
+/* Área de carga de imagen */
+.image-upload-area {
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  padding: 32px;
+  text-align: center;
+  position: relative;
+  transition: all 0.2s;
+}
+
+.image-upload-area:hover {
+  border-color: #f97316;
+  background-color: #fff7ed;
+}
+
+.image-input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.image-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.image-upload-label span {
+  font-size: 0.9rem;
+}
+
+/* Vista previa de imagen */
+.image-preview {
+  position: relative;
+  display: inline-block;
+  max-width: 200px;
+  margin-top: 8px;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.image-remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.image-remove-btn:hover {
+  background-color: #dc2626;
+}
+
+/* Acciones del formulario */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: #6b7280;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.submit-btn {
+  padding: 10px 24px;
+  background-color: #f97316;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #ea580c;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .producto-main {
+    margin-left: 0;
+    padding: 20px;
+    width: 100%;
+  }
+
+  .producto-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .producto-filters {
+    flex-direction: column;
+  }
+
+  .producto-select {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .producto-table-container {
+    overflow-x: auto;
+  }
+
+  .producto-table {
+    min-width: 800px;
+  }
+
+  /* Modal responsive */
+  .producto-form-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .form-modal-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .producto-create-form {
+    padding: 16px;
+  }
+
+  .image-upload-area {
+    padding: 20px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .cancel-btn,
+  .submit-btn {
+    width: 100%;
+  }
+}
