@@ -6,10 +6,10 @@ async function connectDB() {
   try {
     const client = await pool.connect();
     await client.query('SELECT NOW()');
-    console.log('Successfully connected with NEON');
+    console.log('Successfully connected with database');
     client.release();
   } catch (error) {
-    console.error('Error connecting with NEON', error.message);
+    console.error('Error connecting with database', error.message);
     process.exit(1);
   }
 }
