@@ -1,22 +1,29 @@
-require('dotenv').config();
 const app = require('./src/app');
-const pool = require('./config/db');
+const env = require('./config/environment');
+const { testConnection } = require('./config/db');
+const { syncDatabase } = require('./src/models');
 
-async function connectDB() {
+const startServer = async () => {
   try {
-    const client = await pool.connect();
-    await client.query('SELECT NOW()');
-    console.log('Successfully connected with database');
-    client.release();
+    await testConnection();
+    
+    // Synchronized models
+    if (env.NODE_ENV === 'development') {
+      await syncDatabase();
+    }
+    
+    // Start Server
+    app.listen(env.PORT, () => {
+      console.log(`
+      Server running in port: ${env.PORT}
+      In mode: ${env.NODE_ENV}
+      API: ${env.API_PREFIX}
+      `);
+    });
   } catch (error) {
-    console.error('Error connecting with database', error.message);
+    console.error('Error starting server:', error);
     process.exit(1);
   }
-}
+};
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, async () => {
-  console.log(`Server running on port ${PORT}`);
-  await connectDB();
-});
+startServer();
