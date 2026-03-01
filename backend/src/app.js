@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const routes = require('./routes');
 
 const app = express();
 
@@ -11,10 +12,25 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Ruta de prueba
 app.get('/', (req, res) => {
-  res.json({ message: 'API Working' });
+  res.json({ 
+    message: 'API Sistema Muscle funcionando correctamente',
+    version: '1.0.0'
+  });
 });
 
-// Space to import routes later
+// Rutas de la API
+app.use('/api/v1', routes);
 
-module.exports = app; // <-- ESTO ES CRUCIAL
+// Middleware de manejo de errores
+app.use((err, req, res, next) => {
+  console.error('Error:', err.message);
+  
+  res.status(err.status || 500).json({
+    success: false,
+    message: err.message || 'Error interno del servidor'
+  });
+});
+
+module.exports = app;
