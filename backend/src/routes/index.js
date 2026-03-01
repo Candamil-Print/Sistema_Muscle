@@ -9,7 +9,7 @@ router.use('/usuarios', usuarioRoutes);
 router.get('/health', (req, res) => {
   res.json({ 
     success: true, 
-    message: 'API funcionando correctamente',
+    message: 'API workin successfully',
     timestamp: new Date()
   });
 });

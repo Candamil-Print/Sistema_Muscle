@@ -12,7 +12,7 @@ const authMiddleware = {
       if (!token) {
         return res.status(401).json({
           success: false,
-          message: 'No se proporcionó token de autenticación'
+          message: 'No authentication token was provided'
         });
       }
 
@@ -26,14 +26,14 @@ const authMiddleware = {
       if (!usuario) {
         return res.status(401).json({
           success: false,
-          message: 'Usuario no encontrado'
+          message: 'User not found'
         });
       }
 
       if (!usuario.estado) {
         return res.status(401).json({
           success: false,
-          message: 'Usuario inactivo'
+          message: 'User inactive'
         });
       }
 
@@ -43,13 +43,13 @@ const authMiddleware = {
       if (error.name === 'JsonWebTokenError') {
         return res.status(401).json({
           success: false,
-          message: 'Token inválido'
+          message: 'Invalide token'
         });
       }
       if (error.name === 'TokenExpiredError') {
         return res.status(401).json({
           success: false,
-          message: 'Token expirado'
+          message: 'Expired token'
         });
       }
       next(error);
@@ -62,7 +62,7 @@ const authMiddleware = {
       if (!req.usuario) {
         return res.status(401).json({
           success: false,
-          message: 'No autenticado'
+          message: 'unauthenticated'
         });
       }
 
@@ -70,7 +70,7 @@ const authMiddleware = {
       if (req.usuario.id_rol !== 1) {
         return res.status(403).json({
           success: false,
-          message: 'Acceso denegado. Se requieren permisos de administrador'
+          message: 'Access denied, Administrator permissions required'
         });
       }
 
@@ -86,7 +86,7 @@ const authMiddleware = {
       if (!req.usuario) {
         return res.status(401).json({
           success: false,
-          message: 'No autenticado'
+          message: 'Unauthenticated'
         });
       }
 
@@ -94,7 +94,7 @@ const authMiddleware = {
       if (req.usuario.id_rol !== 2) {
         return res.status(403).json({
           success: false,
-          message: 'Acceso denegado. Se requieren permisos de recepcionista'
+          message: 'Access denied, Receptionist permissions required'
         });
       }
 
@@ -110,7 +110,7 @@ const authMiddleware = {
       if (!req.usuario) {
         return res.status(401).json({
           success: false,
-          message: 'No autenticado'
+          message: 'Unauthenticated'
         });
       }
 
@@ -123,7 +123,7 @@ const authMiddleware = {
       if (req.usuario.id_usuario !== parseInt(req.params.id)) {
         return res.status(403).json({
           success: false,
-          message: 'No tienes permiso para acceder a este recurso'
+          message: 'You do not have permissions to access this resource'
         });
       }
 

@@ -27,35 +27,35 @@ router.get(
   usuarioController.getById
 );
 
-// Rutas para crear usuario
+// Path for create user
 router.post(
   '/',
   validationMiddleware.validate(usuarioValidation.create),
   usuarioController.create
 );
 
-// Rutas para actualizar usuario
+// Path for update user
 router.put(
   '/:id',
   validationMiddleware.validate(usuarioValidation.update),
   usuarioController.update
 );
 
-// Rutas para cambiar contraseña
+// Path for update password
 router.put(
   '/:id/cambiar-password',
   validationMiddleware.validate(usuarioValidation.cambiarPassword),
   usuarioController.cambiarPassword
 );
 
-// Rutas para eliminar (soft delete)
+// Path for delete (soft delete)
 router.delete(
   '/:id',
   validationMiddleware.validate(usuarioValidation.getById, 'params'),
   usuarioController.delete
 );
 
-// Ruta para eliminar permanentemente (solo admin)
+// Path to permanently delete (solo admin)
 router.delete(
   '/:id/hard',
   authMiddleware.verifyAdmin,

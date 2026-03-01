@@ -13,7 +13,7 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.STRING(150),
     allowNull: false,
     validate: {
-      notEmpty: { msg: 'El nombre completo es requerido' }
+      notEmpty: { msg: 'Full name is required' }
     }
   },
   tipo_documento: {
@@ -25,7 +25,7 @@ const Usuario = sequelize.define('Usuario', {
     allowNull: false,
     unique: true,
     validate: {
-      notEmpty: { msg: 'El número de documento es requerido' }
+      notEmpty: { msg: 'The document number ir required' }
     }
   },
   direccion: {
@@ -48,7 +48,7 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.STRING(150),
     allowNull: true,
     validate: {
-      isEmail: { msg: 'Debe ser un correo válido' }
+      isEmail: { msg: 'It must be a valid email address' }
     }
   },
   telefono: {

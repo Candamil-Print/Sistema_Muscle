@@ -8,7 +8,7 @@ class UsuarioController {
       const result = await usuarioService.findAll(req.query);
       res.json({
         success: true,
-        message: 'Usuarios obtenidos correctamente',
+        message: 'Users obtained successfully',
         ...result
       });
     } catch (error) {
@@ -22,7 +22,7 @@ class UsuarioController {
       const usuario = await usuarioService.findById(req.params.id);
       res.json({
         success: true,
-        message: 'Usuario obtenido correctamente',
+        message: 'User obtained successfully',
         data: usuario
       });
     } catch (error) {
@@ -36,7 +36,7 @@ class UsuarioController {
       const usuario = await usuarioService.create(req.body);
       res.status(201).json({
         success: true,
-        message: 'Usuario creado correctamente',
+        message: 'Usuer create successfully',
         data: usuario
       });
     } catch (error) {
@@ -50,7 +50,7 @@ class UsuarioController {
       const usuario = await usuarioService.update(req.params.id, req.body);
       res.json({
         success: true,
-        message: 'Usuario actualizado correctamente',
+        message: 'User update successfully',
         data: usuario
       });
     } catch (error) {
@@ -108,7 +108,7 @@ class UsuarioController {
       const usuarios = await usuarioService.findByRol(req.params.id_rol);
       res.json({
         success: true,
-        message: 'Usuarios obtenidos correctamente',
+        message: 'Users obtained successfully',
         data: usuarios
       });
     } catch (error) {

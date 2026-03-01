@@ -16,11 +16,11 @@ Rol.hasMany(Usuario, {
 
 const syncDatabase = async () => {
     try {
-        console.log('✅ Modelos cargados correctamente');
+        console.log('Models successfully uploaded');
         // NO sincronizar automáticamente - comentado para evitar errores
         // await sequelize.sync({ alter: true });
     } catch (error) {
-        console.error('❌ Error:', error);
+        console.error('Error:', error);
     }
 };
 

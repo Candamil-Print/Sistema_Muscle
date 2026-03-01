@@ -70,7 +70,7 @@ class UsuarioService {
     });
 
     if (!usuario) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('User not found');
     }
 
     return usuario;
@@ -81,21 +81,21 @@ class UsuarioService {
     // Verificar si ya existe el documento
     const existeDocumento = await Usuario.findByDocumento(data.numero_documento);
     if (existeDocumento) {
-      throw new Error('Ya existe un usuario con este número de documento');
+      throw new Error(' A user with this document number already exists');
     }
 
-    // Verificar si ya existe el email (si se proporciona)
+    // Verift to email exist (si se proporciona)
     if (data.correo) {
       const existeEmail = await Usuario.findByEmail(data.correo);
       if (existeEmail) {
-        throw new Error('Ya existe un usuario con este correo electrónico');
+        throw new Error('There is alreay a user with this email address');
       }
     }
 
     // Verificar que el rol existe
     const rol = await Rol.findByPk(data.id_rol);
     if (!rol) {
-      throw new Error('El rol especificado no existe');
+      throw new Error('This rol expecificated not found');
     }
 
     const usuario = await Usuario.create(data);
@@ -109,7 +109,7 @@ class UsuarioService {
     const usuario = await Usuario.findByPk(id);
     
     if (!usuario) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('User not found');
     }
 
     // Si se está actualizando el documento, verificar que no exista otro
@@ -121,7 +121,7 @@ class UsuarioService {
         }
       });
       if (existeDocumento) {
-        throw new Error('Ya existe otro usuario con este número de documento');
+        throw new Error('There is alreay another user with this document number');
       }
     }
 
@@ -134,7 +134,7 @@ class UsuarioService {
         }
       });
       if (existeEmail) {
-        throw new Error('Ya existe otro usuario con este correo electrónico');
+        throw new Error('Thisi is already user with email');
       }
     }
 
@@ -142,7 +142,7 @@ class UsuarioService {
     if (data.id_rol && data.id_rol !== usuario.id_rol) {
       const rol = await Rol.findByPk(data.id_rol);
       if (!rol) {
-        throw new Error('El rol especificado no existe');
+        throw new Error('This rol especificated not found');
       }
     }
 
@@ -156,13 +156,13 @@ class UsuarioService {
     const usuario = await Usuario.findByPk(id);
     
     if (!usuario) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('User not found');
     }
 
     // Soft delete: cambiar estado a false
     await usuario.update({ estado: false });
     
-    return { message: 'Usuario desactivado correctamente' };
+    return { message: 'User unenable successfully' };
   }
 
   // Eliminar usuario físicamente (solo para administradores)
@@ -170,12 +170,12 @@ class UsuarioService {
     const usuario = await Usuario.findByPk(id);
     
     if (!usuario) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('User not found');
     }
 
     await usuario.destroy();
     
-    return { message: 'Usuario eliminado permanentemente' };
+    return { message: 'User deleted permanently' };
   }
 
   // Cambiar contraseña
@@ -183,20 +183,20 @@ class UsuarioService {
     const usuario = await Usuario.findByPk(id);
     
     if (!usuario) {
-      throw new Error('Usuario no encontrado');
+      throw new Error('User not found');
     }
 
     // Validar contraseña actual
     const esValida = await usuario.validarPassword(passwordActual);
     if (!esValida) {
-      throw new Error('La contraseña actual es incorrecta');
+      throw new Error('the current password is incorrect');
     }
 
     // Actualizar contraseña
     usuario.password_hash = passwordNueva;
     await usuario.save();
 
-    return { message: 'Contraseña actualizada correctamente' };
+    return { message: 'Password update successfuly' };
   }
 
   // Obtener usuarios por rol
