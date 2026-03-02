@@ -1,15 +1,19 @@
 // backend/src/routes/index.js
 const router = require('express').Router();
 const usuarioRoutes = require('./usuario.routes');
+const productoRoutes = require('./producto.routes');
+const turnoRoutes = require('./turno.routes');
+const cajaRoutes = require('./caja.routes'); // <-- NUEVO
 
-// Rutas de usuarios
 router.use('/usuarios', usuarioRoutes);
+router.use('/productos', productoRoutes);
+router.use('/turnos', turnoRoutes);
+router.use('/cajas', cajaRoutes); // <-- NUEVO
 
-// Ruta de salud
 router.get('/health', (req, res) => {
   res.json({ 
     success: true, 
-    message: 'API workin successfully',
+    message: 'API funcionando correctamente',
     timestamp: new Date()
   });
 });
