@@ -3,17 +3,18 @@
 
 pub mod commands;
 pub mod models;
-pub mod services;  // ← DEBE estar exactamente así
+pub mod services;
 
-use services::db::DbState;  // ← Así se importa desde la carpeta services
+use services::db::connection::DbState;
 use std::sync::Mutex;
 
-pub use services::db::get_db_connection;
+// Exportar para tests
+pub use services::db::connection::get_db_connection;
 pub use commands::*;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let conn = match services::db::init_db() {
+    let conn = match services::db::connection::init_db() {
         Ok(c) => {
             println!("✅ Base de datos conectada");
             c

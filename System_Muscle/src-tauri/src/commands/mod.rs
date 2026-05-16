@@ -1,9 +1,8 @@
-// Eliminar la línea "use rusqlite::Connection;" que no se usa
-
-mod usuarios_commands;
+// Declarar el módulo usuarios
+pub mod usuarios;
 
 // Re-exportar las funciones lógicas
-pub use usuarios_commands::{
+pub use usuarios::logic::{
     crear_usuario_logic,
     modificar_usuario_logic,
     obtener_usuario_logic,
@@ -15,8 +14,8 @@ pub use usuarios_commands::{
 
 // Comandos de Tauri
 use tauri::State;
-use crate::services::db::DbState;
-use crate::models::usuarios::{NuevoUsuario, UsuarioModificacion};
+use crate::services::db::connection::DbState;
+use crate::models::usuarios::usuario::{NuevoUsuario, UsuarioModificacion};
 
 #[tauri::command]
 pub fn test_db_connection() -> Result<String, String> {
@@ -39,7 +38,7 @@ pub fn crear_usuario(
     nuevo: NuevoUsuario,
 ) -> Result<i32, String> {
     let conn = state.conn.lock().unwrap();
-    usuarios_commands::crear_usuario_logic(&conn, &nuevo)
+    crear_usuario_logic(&conn, &nuevo)
 }
 
 #[tauri::command]
@@ -49,25 +48,25 @@ pub fn modificar_usuario(
     modificacion: UsuarioModificacion,
 ) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
-    usuarios_commands::modificar_usuario_logic(&conn, id, &modificacion)
+    modificar_usuario_logic(&conn, id, &modificacion)
 }
 
 #[tauri::command]
 pub fn obtener_usuario(
     state: State<'_, DbState>,
     id: i32,
-) -> Result<crate::models::usuarios::Usuario, String> {
+) -> Result<crate::models::usuarios::usuario::Usuario, String> {
     let conn = state.conn.lock().unwrap();
-    usuarios_commands::obtener_usuario_logic(&conn, id)
+    obtener_usuario_logic(&conn, id)
 }
 
 #[tauri::command]
 pub fn listar_usuarios(
     state: State<'_, DbState>,
     solo_activos: bool,
-) -> Result<Vec<crate::models::usuarios::Usuario>, String> {
+) -> Result<Vec<crate::models::usuarios::usuario::Usuario>, String> {
     let conn = state.conn.lock().unwrap();
-    usuarios_commands::listar_usuarios_logic(&conn, solo_activos)
+    listar_usuarios_logic(&conn, solo_activos)
 }
 
 #[tauri::command]
@@ -76,7 +75,7 @@ pub fn habilitar_usuario(
     id: i32,
 ) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
-    usuarios_commands::habilitar_usuario_logic(&conn, id)
+    habilitar_usuario_logic(&conn, id)
 }
 
 #[tauri::command]
@@ -85,7 +84,7 @@ pub fn deshabilitar_usuario(
     id: i32,
 ) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
-    usuarios_commands::deshabilitar_usuario_logic(&conn, id)
+    deshabilitar_usuario_logic(&conn, id)
 }
 
 #[tauri::command]
@@ -93,7 +92,7 @@ pub fn login(
     state: State<'_, DbState>,
     documento: String,
     password: String,
-) -> Result<Option<crate::models::usuarios::Usuario>, String> {
+) -> Result<Option<crate::models::usuarios::usuario::Usuario>, String> {
     let conn = state.conn.lock().unwrap();
-    usuarios_commands::login_logic(&conn, &documento, &password)
+    login_logic(&conn, &documento, &password)
 }

@@ -1,7 +1,6 @@
 use rusqlite::Connection;
 use bcrypt::{hash, verify, DEFAULT_COST};
-use crate::models::usuarios::{Usuario, NuevoUsuario, UsuarioModificacion};
-
+use crate::models::usuarios::usuario::{Usuario, NuevoUsuario, UsuarioModificacion};
 // ==============================================
 // FUNCIONES LÓGICAS (reutilizables)
 // ==============================================

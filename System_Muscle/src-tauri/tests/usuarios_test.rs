@@ -1,9 +1,9 @@
 //! Tests del módulo de usuarios
-//! Ejecutar con: cargo test --test test_usuarios -- --nocapture
+//! Ejecutar con: cargo test --test usuarios -- --nocapture
 
-use system_muscle_lib::services::db::get_db_connection;
+use system_muscle_lib::services::db::connection::get_db_connection;
 use system_muscle_lib::commands::*;
-use system_muscle_lib::models::usuarios::{NuevoUsuario, UsuarioModificacion};
+use system_muscle_lib::models::usuarios::usuario::{NuevoUsuario, UsuarioModificacion};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Helper para limpiar usuarios de prueba
