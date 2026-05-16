@@ -1,5 +1,5 @@
 //! Tests del módulo de usuarios
-//! Ejecutar con: cargo test --test usuarios -- --nocapture
+//! Ejecutar con: cargo test --test usuarios_test -- --nocapture
 
 use system_muscle_lib::services::db::connection::get_db_connection;
 use system_muscle_lib::commands::*;
