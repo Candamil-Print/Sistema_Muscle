@@ -1,6 +1,4 @@
-// ==============================================
-// MÓDULO USUARIOS
-// ==============================================
+// Modulo de usuarios
 pub mod usuarios;
 
 pub use usuarios::logic::{
@@ -13,9 +11,7 @@ pub use usuarios::logic::{
     login_logic,
 };
 
-// ==============================================
-// MÓDULO PRODUCTOS
-// ==============================================
+// Modulo de productos
 pub mod productos;
 
 pub use productos::logic::{
@@ -29,16 +25,29 @@ pub use productos::logic::{
     desactivar_producto_logic,
 };
 
-// ==============================================
+// Modulo de stock
+pub mod stock;
+
+pub use stock::logic::{
+    obtener_stock_por_producto_logic,
+    listar_stock_logic,
+    ajustar_stock_logic,
+    registrar_entrada_logic,
+    listar_movimientos_entrada_logic,
+    movimientos_por_producto_logic,
+    listar_stock_bajo_logic,
+    listar_notificaciones_logic,
+    marcar_notificacion_logic,
+};
+
 // Comandos de Tauri
-// ==============================================
 use tauri::State;
 use crate::services::db::connection::DbState;
 use crate::models::usuarios::usuario::{NuevoUsuario, UsuarioModificacion};
 use crate::models::productos::producto::{NuevoProducto, ModificarProducto};
+use crate::models::stock::stock::{AjusteStock, NuevoMovimientoEntrada};
 
-// ----- Comandos de utilidad -----
-
+// Comandos de utilidad
 #[tauri::command]
 pub fn test_db_connection() -> Result<String, String> {
     match rusqlite::Connection::open("system_muscle.db") {
@@ -54,8 +63,7 @@ pub fn test_db_connection() -> Result<String, String> {
     }
 }
 
-// ----- Comandos de Usuarios -----
-
+// Comandos de usuarios
 #[tauri::command]
 pub fn crear_usuario(
     state: State<'_, DbState>,
@@ -121,8 +129,7 @@ pub fn login(
     login_logic(&conn, &documento, &password)
 }
 
-// ----- Comandos de Productos -----
-
+// Comandos de productos
 #[tauri::command]
 pub fn crear_producto(
     state: State<'_, DbState>,
@@ -186,4 +193,85 @@ pub fn desactivar_producto(
 ) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
     desactivar_producto_logic(&conn, id)
+}
+
+// Comandos de stock
+#[tauri::command]
+pub fn obtener_stock_por_producto(
+    state: State<'_, DbState>,
+    id_producto: i32,
+) -> Result<crate::models::stock::stock::Stock, String> {
+    let conn = state.conn.lock().unwrap();
+    obtener_stock_por_producto_logic(&conn, id_producto)
+}
+
+#[tauri::command]
+pub fn listar_stock(
+    state: State<'_, DbState>,
+) -> Result<Vec<crate::models::stock::stock::StockConProducto>, String> {
+    let conn = state.conn.lock().unwrap();
+    listar_stock_logic(&conn)
+}
+
+#[tauri::command]
+pub fn ajustar_stock(
+    state: State<'_, DbState>,
+    id_producto: i32,
+    ajuste: AjusteStock,
+) -> Result<(), String> {
+    let conn = state.conn.lock().unwrap();
+    ajustar_stock_logic(&conn, id_producto, &ajuste)
+}
+
+#[tauri::command]
+pub fn registrar_entrada(
+    state: State<'_, DbState>,
+    entrada: NuevoMovimientoEntrada,
+) -> Result<i32, String> {
+    let conn = state.conn.lock().unwrap();
+    registrar_entrada_logic(&conn, &entrada)
+}
+
+#[tauri::command]
+pub fn listar_movimientos_entrada(
+    state: State<'_, DbState>,
+) -> Result<Vec<crate::models::stock::stock::MovimientoEntradaDetalle>, String> {
+    let conn = state.conn.lock().unwrap();
+    listar_movimientos_entrada_logic(&conn)
+}
+
+#[tauri::command]
+pub fn movimientos_por_producto(
+    state: State<'_, DbState>,
+    id_producto: i32,
+) -> Result<Vec<crate::models::stock::stock::MovimientoEntrada>, String> {
+    let conn = state.conn.lock().unwrap();
+    movimientos_por_producto_logic(&conn, id_producto)
+}
+
+#[tauri::command]
+pub fn listar_stock_bajo(
+    state: State<'_, DbState>,
+) -> Result<Vec<crate::models::stock::stock::ProductoStockBajo>, String> {
+    let conn = state.conn.lock().unwrap();
+    listar_stock_bajo_logic(&conn)
+}
+
+#[tauri::command]
+pub fn listar_notificaciones(
+    state: State<'_, DbState>,
+    solo_no_leidas: bool,
+) -> Result<Vec<crate::models::stock::stock::Notificacion>, String> {
+    let conn = state.conn.lock().unwrap();
+    listar_notificaciones_logic(&conn, solo_no_leidas)
+}
+
+#[tauri::command]
+pub fn marcar_notificacion(
+    state: State<'_, DbState>,
+    id_notificacion: i32,
+    estado: i32,
+) -> Result<(), String> {
+    let conn = state.conn.lock().unwrap();
+    marcar_notificacion_logic(&conn, id_notificacion, estado)
 }

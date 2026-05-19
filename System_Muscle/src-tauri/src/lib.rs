@@ -16,11 +16,11 @@ pub use commands::*;
 pub fn run() {
     let conn = match services::db::connection::init_db() {
         Ok(c) => {
-            println!("✅ Base de datos conectada");
+            println!("Base de datos conectada");
             c
         }
         Err(e) => {
-            eprintln!("❌ Error al conectar a la BD: {}", e);
+            eprintln!("Error al conectar a la BD: {}", e);
             std::process::exit(1);
         }
     };
@@ -48,6 +48,16 @@ pub fn run() {
             commands::buscar_productos,
             commands::activar_producto,
             commands::desactivar_producto,
+            // Stock
+            commands::obtener_stock_por_producto,
+            commands::listar_stock,
+            commands::ajustar_stock,
+            commands::registrar_entrada,
+            commands::listar_movimientos_entrada,
+            commands::movimientos_por_producto,
+            commands::listar_stock_bajo,
+            commands::listar_notificaciones,
+            commands::marcar_notificacion,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
