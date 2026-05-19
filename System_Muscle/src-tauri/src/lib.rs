@@ -52,12 +52,17 @@ pub fn run() {
             commands::obtener_stock_por_producto,
             commands::listar_stock,
             commands::ajustar_stock,
-            commands::registrar_entrada,
-            commands::listar_movimientos_entrada,
-            commands::movimientos_por_producto,
             commands::listar_stock_bajo,
             commands::listar_notificaciones,
             commands::marcar_notificacion,
+            // Movimientos de entrada
+            commands::registrar_entrada,
+            commands::obtener_movimiento,
+            commands::listar_movimientos_entrada,
+            commands::movimientos_por_producto,
+            commands::movimientos_por_usuario,
+            commands::movimientos_por_rango_fechas,
+            commands::total_entradas_por_producto,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

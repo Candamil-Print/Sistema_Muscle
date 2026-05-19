@@ -32,12 +32,22 @@ pub use stock::logic::{
     obtener_stock_por_producto_logic,
     listar_stock_logic,
     ajustar_stock_logic,
-    registrar_entrada_logic,
-    listar_movimientos_entrada_logic,
-    movimientos_por_producto_logic,
     listar_stock_bajo_logic,
     listar_notificaciones_logic,
     marcar_notificacion_logic,
+};
+
+// Modulo de movimientos de entrada
+pub mod movimientos_entrada;
+
+pub use movimientos_entrada::logic::{
+    registrar_entrada_logic,
+    obtener_movimiento_logic,
+    listar_movimientos_entrada_logic,
+    movimientos_por_producto_logic,
+    movimientos_por_usuario_logic,
+    movimientos_por_rango_fechas_logic,
+    total_entradas_por_producto_logic,
 };
 
 // Comandos de Tauri
@@ -45,7 +55,8 @@ use tauri::State;
 use crate::services::db::connection::DbState;
 use crate::models::usuarios::usuario::{NuevoUsuario, UsuarioModificacion};
 use crate::models::productos::producto::{NuevoProducto, ModificarProducto};
-use crate::models::stock::stock::{AjusteStock, NuevoMovimientoEntrada};
+use crate::models::stock::stock::AjusteStock;
+use crate::models::movimientos_entrada::movimiento_entrada::NuevoMovimientoEntrada;
 
 // Comandos de utilidad
 #[tauri::command]
@@ -224,32 +235,6 @@ pub fn ajustar_stock(
 }
 
 #[tauri::command]
-pub fn registrar_entrada(
-    state: State<'_, DbState>,
-    entrada: NuevoMovimientoEntrada,
-) -> Result<i32, String> {
-    let conn = state.conn.lock().unwrap();
-    registrar_entrada_logic(&conn, &entrada)
-}
-
-#[tauri::command]
-pub fn listar_movimientos_entrada(
-    state: State<'_, DbState>,
-) -> Result<Vec<crate::models::stock::stock::MovimientoEntradaDetalle>, String> {
-    let conn = state.conn.lock().unwrap();
-    listar_movimientos_entrada_logic(&conn)
-}
-
-#[tauri::command]
-pub fn movimientos_por_producto(
-    state: State<'_, DbState>,
-    id_producto: i32,
-) -> Result<Vec<crate::models::stock::stock::MovimientoEntrada>, String> {
-    let conn = state.conn.lock().unwrap();
-    movimientos_por_producto_logic(&conn, id_producto)
-}
-
-#[tauri::command]
 pub fn listar_stock_bajo(
     state: State<'_, DbState>,
 ) -> Result<Vec<crate::models::stock::stock::ProductoStockBajo>, String> {
@@ -274,4 +259,68 @@ pub fn marcar_notificacion(
 ) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
     marcar_notificacion_logic(&conn, id_notificacion, estado)
+}
+
+// Comandos de movimientos de entrada
+#[tauri::command]
+pub fn registrar_entrada(
+    state: State<'_, DbState>,
+    entrada: NuevoMovimientoEntrada,
+) -> Result<i32, String> {
+    let conn = state.conn.lock().unwrap();
+    registrar_entrada_logic(&conn, &entrada)
+}
+
+#[tauri::command]
+pub fn obtener_movimiento(
+    state: State<'_, DbState>,
+    id: i32,
+) -> Result<crate::models::movimientos_entrada::movimiento_entrada::MovimientoEntrada, String> {
+    let conn = state.conn.lock().unwrap();
+    obtener_movimiento_logic(&conn, id)
+}
+
+#[tauri::command]
+pub fn listar_movimientos_entrada(
+    state: State<'_, DbState>,
+) -> Result<Vec<crate::models::movimientos_entrada::movimiento_entrada::MovimientoEntradaDetalle>, String> {
+    let conn = state.conn.lock().unwrap();
+    listar_movimientos_entrada_logic(&conn)
+}
+
+#[tauri::command]
+pub fn movimientos_por_producto(
+    state: State<'_, DbState>,
+    id_producto: i32,
+) -> Result<Vec<crate::models::movimientos_entrada::movimiento_entrada::MovimientoEntradaDetalle>, String> {
+    let conn = state.conn.lock().unwrap();
+    movimientos_por_producto_logic(&conn, id_producto)
+}
+
+#[tauri::command]
+pub fn movimientos_por_usuario(
+    state: State<'_, DbState>,
+    id_usuario: i32,
+) -> Result<Vec<crate::models::movimientos_entrada::movimiento_entrada::MovimientoEntradaDetalle>, String> {
+    let conn = state.conn.lock().unwrap();
+    movimientos_por_usuario_logic(&conn, id_usuario)
+}
+
+#[tauri::command]
+pub fn movimientos_por_rango_fechas(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+) -> Result<Vec<crate::models::movimientos_entrada::movimiento_entrada::MovimientoEntradaDetalle>, String> {
+    let conn = state.conn.lock().unwrap();
+    movimientos_por_rango_fechas_logic(&conn, &fecha_inicio, &fecha_fin)
+}
+
+#[tauri::command]
+pub fn total_entradas_por_producto(
+    state: State<'_, DbState>,
+    id_producto: i32,
+) -> Result<i32, String> {
+    let conn = state.conn.lock().unwrap();
+    total_entradas_por_producto_logic(&conn, id_producto)
 }
