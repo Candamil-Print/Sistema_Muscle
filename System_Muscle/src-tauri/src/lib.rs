@@ -24,13 +24,15 @@ pub fn run() {
             std::process::exit(1);
         }
     };
-    
+
     tauri::Builder::default()
         .manage(DbState {
             conn: Mutex::new(conn),
         })
         .invoke_handler(tauri::generate_handler![
+            // Utilidades
             commands::test_db_connection,
+            // Usuarios
             commands::crear_usuario,
             commands::modificar_usuario,
             commands::obtener_usuario,
@@ -38,6 +40,14 @@ pub fn run() {
             commands::habilitar_usuario,
             commands::deshabilitar_usuario,
             commands::login,
+            // Productos
+            commands::crear_producto,
+            commands::modificar_producto,
+            commands::obtener_producto,
+            commands::listar_productos,
+            commands::buscar_productos,
+            commands::activar_producto,
+            commands::desactivar_producto,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
