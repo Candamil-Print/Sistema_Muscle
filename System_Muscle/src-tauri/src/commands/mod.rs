@@ -65,6 +65,32 @@ pub use ventas::logic::{
     total_ventas_por_producto_logic,
 };
 
+// Modulo de caja
+pub mod caja;
+
+pub use caja::logic::{
+    abrir_caja_logic,
+    cerrar_caja_logic,
+    obtener_caja_logic,
+    obtener_caja_activa_logic,
+    listar_cajas_logic,
+};
+
+// Modulo de historial
+pub mod historial;
+
+pub use historial::logic::{
+    registrar_accion_logic,
+    listar_historial_logic,
+    obtener_accion_logic,
+    historial_por_usuario_logic,
+    historial_por_turno_logic,
+    historial_por_accion_logic,
+    historial_por_rango_fechas_logic,
+    listar_historial_detalle_logic,
+    ultimos_historial_logic,
+};
+
 // Comandos de Tauri
 use tauri::State;
 use crate::services::db::connection::DbState;
@@ -73,6 +99,8 @@ use crate::models::productos::producto::{NuevoProducto, ModificarProducto};
 use crate::models::stock::stock::AjusteStock;
 use crate::models::movimientos_entrada::movimiento_entrada::NuevoMovimientoEntrada;
 use crate::models::ventas::venta::NuevaVenta;
+use crate::models::caja::caja::{NuevaCaja, CierreCaja};
+use crate::models::historial::historial::{NuevaAccion, FiltroHistorial};
 
 // Comandos de utilidad
 #[tauri::command]
@@ -420,4 +448,97 @@ pub fn total_ventas_por_producto(
 ) -> Result<i32, String> {
     let conn = state.conn.lock().unwrap();
     total_ventas_por_producto_logic(&conn, id_producto)
+}
+
+
+// Comandos de caja
+#[tauri::command]
+pub fn abrir_caja(
+    state: State<'_, DbState>,
+    nueva: NuevaCaja,
+) -> Result<i32, String> {
+    let conn = state.conn.lock().unwrap();
+    abrir_caja_logic(&conn, &nueva)
+}
+
+#[tauri::command]
+pub fn cerrar_caja(
+    state: State<'_, DbState>,
+    cierre: CierreCaja,
+) -> Result<(), String> {
+    let conn = state.conn.lock().unwrap();
+    cerrar_caja_logic(&conn, &cierre)
+}
+
+#[tauri::command]
+pub fn obtener_caja(
+    state: State<'_, DbState>,
+    id: i32,
+) -> Result<crate::models::caja::caja::Caja, String> {
+    let conn = state.conn.lock().unwrap();
+    obtener_caja_logic(&conn, id)
+}
+
+#[tauri::command]
+pub fn obtener_caja_activa(
+    state: State<'_, DbState>,
+) -> Result<Option<crate::models::caja::caja::Caja>, String> {
+    let conn = state.conn.lock().unwrap();
+    obtener_caja_activa_logic(&conn)
+}
+
+#[tauri::command]
+pub fn listar_cajas(
+    state: State<'_, DbState>,
+    solo_abiertas: bool,
+) -> Result<Vec<crate::models::caja::caja::Caja>, String> {
+    let conn = state.conn.lock().unwrap();
+    listar_cajas_logic(&conn, solo_abiertas)
+}
+
+
+// Comandos de historial
+#[tauri::command]
+pub fn registrar_accion(
+    state: State<'_, DbState>,
+    accion: NuevaAccion,
+) -> Result<i32, String> {
+    let conn = state.conn.lock().unwrap();
+    registrar_accion_logic(&conn, &accion)
+}
+
+#[tauri::command]
+pub fn listar_historial(
+    state: State<'_, DbState>,
+    filtro: FiltroHistorial,
+) -> Result<Vec<crate::models::historial::historial::HistorialAccion>, String> {
+    let conn = state.conn.lock().unwrap();
+    listar_historial_logic(&conn, &filtro)
+}
+
+#[tauri::command]
+pub fn obtener_accion(
+    state: State<'_, DbState>,
+    id: i32,
+) -> Result<crate::models::historial::historial::HistorialAccion, String> {
+    let conn = state.conn.lock().unwrap();
+    obtener_accion_logic(&conn, id)
+}
+
+#[tauri::command]
+pub fn historial_por_usuario(
+    state: State<'_, DbState>,
+    id_usuario: i32,
+) -> Result<Vec<crate::models::historial::historial::HistorialAccion>, String> {
+    let conn = state.conn.lock().unwrap();
+    historial_por_usuario_logic(&conn, id_usuario)
+}
+
+#[tauri::command]
+pub fn historial_por_turno(
+    state: State<'_, DbState>,
+    id_turno: i32,
+) -> Result<Vec<crate::models::historial::historial::HistorialAccion>, String> {
+    let conn = state.conn.lock().unwrap();
+    historial_por_turno_logic(&conn, id_turno)
 }

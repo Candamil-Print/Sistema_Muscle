@@ -73,6 +73,18 @@ pub fn run() {
             commands::ventas_por_rango_fechas,
             commands::resumen_ventas_diario,
             commands::total_ventas_por_producto,
+            // Caja
+            commands::abrir_caja,
+            commands::cerrar_caja,
+            commands::obtener_caja,
+            commands::obtener_caja_activa,
+            commands::listar_cajas,
+            // Historial
+            commands::registrar_accion,
+            commands::listar_historial,
+            commands::obtener_accion,
+            commands::historial_por_usuario,
+            commands::historial_por_turno,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
