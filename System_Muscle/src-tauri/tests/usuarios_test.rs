@@ -36,59 +36,6 @@ fn crear_usuario_prueba(conn: &rusqlite::Connection) -> i32 {
 }
 
 // ==============================================
-// TESTS DE LOGIN
-// ==============================================
-
-#[test]
-fn test_login_con_admin_exitoso() {
-    println!("\n🔐 TEST: Login con administrador");
-    let conn = get_db_connection().unwrap();
-    
-    // Usar la contraseña real que está hasheada en la BD
-    let resultado = login_logic(&conn, "1000000000", "adminsystemmuscle");
-    
-    match resultado {
-        Ok(Some(usuario)) => {
-            println!("   ✅ Login exitoso");
-            println!("   👤 Usuario: {}", usuario.nombre_completo);
-            println!("   📌 Rol: {}", usuario.id_rol);
-            assert_eq!(usuario.id_rol, 1);
-            assert_eq!(usuario.estado, 1);
-        }
-        Ok(None) => panic!("❌ Login falló - Credenciales inválidas"),
-        Err(e) => panic!("❌ Error en login: {}", e),
-    }
-}
-
-#[test]
-fn test_login_con_credenciales_incorrectas() {
-    println!("\n🔐 TEST: Login con credenciales incorrectas");
-    let conn = get_db_connection().unwrap();
-    
-    let resultado = login_logic(&conn, "1000000000", "password_falso");
-    
-    match resultado {
-        Ok(None) => println!("   ✅ Login rechazado correctamente"),
-        Ok(Some(_)) => panic!("❌ Debería haber fallado el login"),
-        Err(e) => panic!("❌ Error en login: {}", e),
-    }
-}
-
-#[test]
-fn test_login_con_usuario_inexistente() {
-    println!("\n🔐 TEST: Login con usuario inexistente");
-    let conn = get_db_connection().unwrap();
-    
-    let resultado = login_logic(&conn, "999999999", "cualquier");
-    
-    match resultado {
-        Ok(None) => println!("   ✅ Usuario no encontrado correctamente"),
-        Ok(Some(_)) => panic!("❌ No debería encontrar un usuario inexistente"),
-        Err(e) => panic!("❌ Error en login: {}", e),
-    }
-}
-
-// ==============================================
 // TESTS DE CREAR USUARIO
 // ==============================================
 
@@ -374,40 +321,6 @@ fn test_habilitar_usuario() {
     println!("   ✅ Usuario habilitado");
     
     limpiar_usuario_prueba(&conn, "TEST999");
-}
-
-#[test]
-fn test_login_usuario_deshabilitado() {
-    println!("\n🚫 TEST: Login con usuario deshabilitado");
-    let conn = get_db_connection().unwrap();
-    
-    limpiar_usuario_prueba(&conn, "BLOQUEADO123");
-    
-    let nuevo = NuevoUsuario {
-        nombre_completo: "Usuario Bloqueado".to_string(),
-        tipo_documento: "CC".to_string(),
-        numero_documento: "BLOQUEADO123".to_string(),
-        direccion: None,
-        tipo_sangre: Some("O+".to_string()),
-        eps: Some("SURA".to_string()),
-        genero: Some("MASCULINO".to_string()),
-        correo: None,
-        telefono: None,
-        password: "pass123".to_string(),
-    };
-    
-    let id = crear_usuario_logic(&conn, &nuevo).unwrap();
-    deshabilitar_usuario_logic(&conn, id).unwrap();
-    
-    let resultado = login_logic(&conn, "BLOQUEADO123", "pass123");
-    
-    match resultado {
-        Ok(None) => println!("   ✅ Login rechazado (usuario deshabilitado)"),
-        Ok(Some(_)) => panic!("❌ No debería permitir login"),
-        Err(e) => panic!("❌ Error: {}", e),
-    }
-    
-    limpiar_usuario_prueba(&conn, "BLOQUEADO123");
 }
 
 // ==============================================

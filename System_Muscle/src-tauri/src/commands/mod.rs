@@ -8,8 +8,12 @@ pub use usuarios::logic::{
     listar_usuarios_logic,
     habilitar_usuario_logic,
     deshabilitar_usuario_logic,
-    login_logic,
 };
+
+// Modulo de login
+pub mod login;
+
+pub use login::logic::{login_logic, verificar_sesion_logic};
 
 // Modulo de productos
 pub mod productos;
@@ -121,6 +125,7 @@ pub use historial::logic::{
 // Comandos de Tauri
 use tauri::State;
 use crate::services::db::connection::DbState;
+use crate::models::login::login::CredencialesLogin;
 use crate::models::usuarios::usuario::{NuevoUsuario, UsuarioModificacion};
 use crate::models::productos::producto::{NuevoProducto, ModificarProducto};
 use crate::models::stock::stock::AjusteStock;
@@ -204,11 +209,19 @@ pub fn deshabilitar_usuario(
 #[tauri::command]
 pub fn login(
     state: State<'_, DbState>,
-    documento: String,
-    password: String,
-) -> Result<Option<crate::models::usuarios::usuario::Usuario>, String> {
+    credenciales: CredencialesLogin,
+) -> Result<Option<crate::models::login::login::SesionUsuario>, String> {
     let conn = state.conn.lock().unwrap();
-    login_logic(&conn, &documento, &password)
+    login_logic(&conn, &credenciales)
+}
+
+#[tauri::command]
+pub fn verificar_sesion(
+    state: State<'_, DbState>,
+    id_usuario: i32,
+) -> Result<Option<crate::models::login::login::SesionUsuario>, String> {
+    let conn = state.conn.lock().unwrap();
+    verificar_sesion_logic(&conn, id_usuario)
 }
 
 // Comandos de productos

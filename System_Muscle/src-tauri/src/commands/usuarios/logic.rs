@@ -1,5 +1,5 @@
 use rusqlite::Connection;
-use bcrypt::{hash, verify, DEFAULT_COST};
+use bcrypt::{hash, DEFAULT_COST};
 use crate::models::usuarios::usuario::{Usuario, NuevoUsuario, UsuarioModificacion};
 // ==============================================
 // FUNCIONES LÓGICAS (reutilizables)
@@ -165,40 +165,4 @@ pub fn deshabilitar_usuario_logic(conn: &Connection, id: i32) -> Result<(), Stri
         [id]
     ).map_err(|e| e.to_string())?;
     Ok(())
-}
-
-pub fn login_logic(conn: &Connection, documento: &str, password: &str) -> Result<Option<Usuario>, String> {
-    let mut stmt = conn.prepare(
-        "SELECT id_usuario, nombre_completo, tipo_documento, numero_documento,
-                direccion, tipo_sangre, eps, genero, correo, telefono,
-                estado, id_rol, password_hash, fecha_creacion
-         FROM usuarios WHERE numero_documento = ?1 AND estado = 1"
-    ).map_err(|e| e.to_string())?;
-    
-    let mut rows = stmt.query([documento]).map_err(|e| e.to_string())?;
-    
-    if let Some(row) = rows.next().map_err(|e| e.to_string())? {
-        let hash: String = row.get(12).map_err(|e| e.to_string())?;
-        
-        // Usar bcrypt verify
-        if verify(password, &hash).map_err(|e| e.to_string())? {
-            return Ok(Some(Usuario {
-                id_usuario: row.get(0).map_err(|e| e.to_string())?,
-                nombre_completo: row.get(1).map_err(|e| e.to_string())?,
-                tipo_documento: row.get(2).map_err(|e| e.to_string())?,
-                numero_documento: row.get(3).map_err(|e| e.to_string())?,
-                direccion: row.get(4).map_err(|e| e.to_string())?,
-                tipo_sangre: row.get(5).map_err(|e| e.to_string())?,
-                eps: row.get(6).map_err(|e| e.to_string())?,
-                genero: row.get(7).map_err(|e| e.to_string())?,
-                correo: row.get(8).map_err(|e| e.to_string())?,
-                telefono: row.get(9).map_err(|e| e.to_string())?,
-                estado: row.get(10).map_err(|e| e.to_string())?,
-                id_rol: row.get(11).map_err(|e| e.to_string())?,
-                fecha_creacion: row.get(13).map_err(|e| e.to_string())?,
-            }));
-        }
-    }
-    
-    Ok(None)
 }

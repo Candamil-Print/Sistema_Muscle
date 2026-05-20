@@ -40,6 +40,7 @@ pub fn run() {
             commands::habilitar_usuario,
             commands::deshabilitar_usuario,
             commands::login,
+            commands::verificar_sesion,
             // Productos
             commands::crear_producto,
             commands::modificar_producto,
