@@ -15,14 +15,16 @@ pub struct Caja {
     pub id_turno: Option<i32>,
 }
 
-#[derive(Debug, Deserialize)]
+/// Datos para abrir una caja
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NuevaCaja {
     pub monto_apertura: f64,
     pub id_usuario_apertura: i32,
     pub id_turno: i32,
 }
 
-#[derive(Debug, Deserialize)]
+/// Datos para cerrar una caja abierta
+#[derive(Debug, Serialize, Deserialize)]
 pub struct CierreCaja {
     pub id_caja: i32,
     pub monto_cierre: f64,
