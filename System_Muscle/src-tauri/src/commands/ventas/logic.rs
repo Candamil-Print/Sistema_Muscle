@@ -1,7 +1,5 @@
 use rusqlite::Connection;
-use crate::models::ventas::venta::{
-    DetalleVentaDetalle, NuevaVenta, ResumenVentasDiario, Venta, VentaResumen,
-};
+use crate::models::ventas::venta::{DetalleVentaDetalle, NuevaVenta, Venta, VentaResumen};
 
 const METODO_EFECTIVO: i32 = 1;
 const METODO_TRANSFERENCIA: i32 = 2;
@@ -410,35 +408,6 @@ pub fn ventas_por_rango_fechas_logic(
                 nombre_usuario: row.get(3)?,
                 id_caja: row.get(4)?,
                 total: row.get(5)?,
-            })
-        })
-        .map_err(|e| e.to_string())?;
-
-    let mut lista = Vec::new();
-    for item in rows {
-        lista.push(item.map_err(|e| e.to_string())?);
-    }
-    Ok(lista)
-}
-
-/// Resumen diario de ventas desde la vista del sistema.
-pub fn resumen_ventas_diario_logic(conn: &Connection) -> Result<Vec<ResumenVentasDiario>, String> {
-    let mut stmt = conn
-        .prepare(
-            r#"SELECT fecha, numero_ventas, total_efectivo, total_transferencia, total_general
-               FROM vista_resumen_ventas_diario
-               ORDER BY fecha DESC"#,
-        )
-        .map_err(|e| e.to_string())?;
-
-    let rows = stmt
-        .query_map([], |row| {
-            Ok(ResumenVentasDiario {
-                fecha: row.get(0)?,
-                numero_ventas: row.get(1)?,
-                total_efectivo: row.get(2)?,
-                total_transferencia: row.get(3)?,
-                total_general: row.get(4)?,
             })
         })
         .map_err(|e| e.to_string())?;

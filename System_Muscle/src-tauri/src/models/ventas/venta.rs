@@ -47,16 +47,6 @@ pub struct VentaResumen {
     pub total: f64,
 }
 
-/// Resumen diario desde la vista `vista_resumen_ventas_diario`
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct ResumenVentasDiario {
-    pub fecha: String,
-    pub numero_ventas: i32,
-    pub total_efectivo: f64,
-    pub total_transferencia: f64,
-    pub total_general: f64,
-}
-
 /// Línea para registrar una nueva venta
 #[derive(Debug, Deserialize, Clone)]
 pub struct LineaVenta {

@@ -72,8 +72,24 @@ pub use ventas::logic::{
     ventas_por_usuario_logic,
     ventas_por_caja_logic,
     ventas_por_rango_fechas_logic,
-    resumen_ventas_diario_logic,
     total_ventas_por_producto_logic,
+};
+
+// Modulo de reportes
+pub mod reportes;
+
+pub use reportes::logic::{
+    resumen_ventas_diario_logic,
+    resumen_ventas_diario_rango_logic,
+    resumen_ventas_rango_logic,
+    productos_mas_vendidos_logic,
+    reporte_stock_bajo_logic,
+    reporte_inventario_logic,
+    reporte_entradas_rango_logic,
+    ventas_por_usuario_reporte_logic,
+    ventas_por_metodo_pago_logic,
+    reporte_cajas_rango_logic,
+    dashboard_resumen_logic,
 };
 
 // Modulo de caja
@@ -489,14 +505,6 @@ pub fn ventas_por_rango_fechas(
 }
 
 #[tauri::command]
-pub fn resumen_ventas_diario(
-    state: State<'_, DbState>,
-) -> Result<Vec<crate::models::ventas::venta::ResumenVentasDiario>, String> {
-    let conn = state.conn.lock().unwrap();
-    resumen_ventas_diario_logic(&conn)
-}
-
-#[tauri::command]
 pub fn total_ventas_por_producto(
     state: State<'_, DbState>,
     id_producto: i32,
@@ -596,4 +604,108 @@ pub fn historial_por_turno(
 ) -> Result<Vec<crate::models::historial::historial::HistorialAccion>, String> {
     let conn = state.conn.lock().unwrap();
     historial_por_turno_logic(&conn, id_turno)
+}
+
+// Comandos de reportes
+#[tauri::command]
+pub fn resumen_ventas_diario(
+    state: State<'_, DbState>,
+) -> Result<Vec<crate::models::reportes::reporte::ResumenVentasDiario>, String> {
+    let conn = state.conn.lock().unwrap();
+    resumen_ventas_diario_logic(&conn)
+}
+
+#[tauri::command]
+pub fn resumen_ventas_diario_rango(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+) -> Result<Vec<crate::models::reportes::reporte::ResumenVentasDiario>, String> {
+    let conn = state.conn.lock().unwrap();
+    resumen_ventas_diario_rango_logic(&conn, &fecha_inicio, &fecha_fin)
+}
+
+#[tauri::command]
+pub fn resumen_ventas_rango(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+) -> Result<crate::models::reportes::reporte::ResumenVentasRango, String> {
+    let conn = state.conn.lock().unwrap();
+    resumen_ventas_rango_logic(&conn, &fecha_inicio, &fecha_fin)
+}
+
+#[tauri::command]
+pub fn productos_mas_vendidos(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+    limite: i32,
+) -> Result<Vec<crate::models::reportes::reporte::ProductoMasVendido>, String> {
+    let conn = state.conn.lock().unwrap();
+    productos_mas_vendidos_logic(&conn, &fecha_inicio, &fecha_fin, limite)
+}
+
+#[tauri::command]
+pub fn reporte_stock_bajo(
+    state: State<'_, DbState>,
+) -> Result<Vec<crate::models::reportes::reporte::ReporteStockBajo>, String> {
+    let conn = state.conn.lock().unwrap();
+    reporte_stock_bajo_logic(&conn)
+}
+
+#[tauri::command]
+pub fn reporte_inventario(
+    state: State<'_, DbState>,
+) -> Result<Vec<crate::models::reportes::reporte::ReporteInventario>, String> {
+    let conn = state.conn.lock().unwrap();
+    reporte_inventario_logic(&conn)
+}
+
+#[tauri::command]
+pub fn reporte_entradas_rango(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+) -> Result<Vec<crate::models::reportes::reporte::ReporteEntradasProducto>, String> {
+    let conn = state.conn.lock().unwrap();
+    reporte_entradas_rango_logic(&conn, &fecha_inicio, &fecha_fin)
+}
+
+#[tauri::command]
+pub fn ventas_por_usuario_reporte(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+) -> Result<Vec<crate::models::reportes::reporte::VentasPorUsuario>, String> {
+    let conn = state.conn.lock().unwrap();
+    ventas_por_usuario_reporte_logic(&conn, &fecha_inicio, &fecha_fin)
+}
+
+#[tauri::command]
+pub fn ventas_por_metodo_pago_reporte(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+) -> Result<Vec<crate::models::reportes::reporte::VentasPorMetodoPago>, String> {
+    let conn = state.conn.lock().unwrap();
+    ventas_por_metodo_pago_logic(&conn, &fecha_inicio, &fecha_fin)
+}
+
+#[tauri::command]
+pub fn reporte_cajas_rango(
+    state: State<'_, DbState>,
+    fecha_inicio: String,
+    fecha_fin: String,
+) -> Result<Vec<crate::models::reportes::reporte::ReporteCaja>, String> {
+    let conn = state.conn.lock().unwrap();
+    reporte_cajas_rango_logic(&conn, &fecha_inicio, &fecha_fin)
+}
+
+#[tauri::command]
+pub fn dashboard_resumen(
+    state: State<'_, DbState>,
+) -> Result<crate::models::reportes::reporte::DashboardResumen, String> {
+    let conn = state.conn.lock().unwrap();
+    dashboard_resumen_logic(&conn)
 }
