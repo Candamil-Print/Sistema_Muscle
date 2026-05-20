@@ -33,8 +33,19 @@ pub use stock::logic::{
     listar_stock_logic,
     ajustar_stock_logic,
     listar_stock_bajo_logic,
+};
+
+// Modulo de notificaciones
+pub mod notificaciones;
+
+pub use notificaciones::logic::{
+    obtener_notificacion_logic,
     listar_notificaciones_logic,
+    notificaciones_por_producto_logic,
+    notificaciones_por_estado_logic,
+    contar_no_leidas_logic,
     marcar_notificacion_logic,
+    marcar_todas_leidas_logic,
 };
 
 // Modulo de movimientos de entrada
@@ -286,13 +297,49 @@ pub fn listar_stock_bajo(
     listar_stock_bajo_logic(&conn)
 }
 
+// Comandos de notificaciones
+#[tauri::command]
+pub fn obtener_notificacion(
+    state: State<'_, DbState>,
+    id_notificacion: i32,
+) -> Result<crate::models::notificaciones::notificacion::Notificacion, String> {
+    let conn = state.conn.lock().unwrap();
+    obtener_notificacion_logic(&conn, id_notificacion)
+}
+
 #[tauri::command]
 pub fn listar_notificaciones(
     state: State<'_, DbState>,
     solo_no_leidas: bool,
-) -> Result<Vec<crate::models::stock::stock::Notificacion>, String> {
+) -> Result<Vec<crate::models::notificaciones::notificacion::Notificacion>, String> {
     let conn = state.conn.lock().unwrap();
     listar_notificaciones_logic(&conn, solo_no_leidas)
+}
+
+#[tauri::command]
+pub fn notificaciones_por_producto(
+    state: State<'_, DbState>,
+    id_producto: i32,
+) -> Result<Vec<crate::models::notificaciones::notificacion::Notificacion>, String> {
+    let conn = state.conn.lock().unwrap();
+    notificaciones_por_producto_logic(&conn, id_producto)
+}
+
+#[tauri::command]
+pub fn notificaciones_por_estado(
+    state: State<'_, DbState>,
+    estado: i32,
+) -> Result<Vec<crate::models::notificaciones::notificacion::Notificacion>, String> {
+    let conn = state.conn.lock().unwrap();
+    notificaciones_por_estado_logic(&conn, estado)
+}
+
+#[tauri::command]
+pub fn contar_notificaciones_no_leidas(
+    state: State<'_, DbState>,
+) -> Result<i32, String> {
+    let conn = state.conn.lock().unwrap();
+    contar_no_leidas_logic(&conn)
 }
 
 #[tauri::command]
@@ -303,6 +350,14 @@ pub fn marcar_notificacion(
 ) -> Result<(), String> {
     let conn = state.conn.lock().unwrap();
     marcar_notificacion_logic(&conn, id_notificacion, estado)
+}
+
+#[tauri::command]
+pub fn marcar_todas_notificaciones_leidas(
+    state: State<'_, DbState>,
+) -> Result<i32, String> {
+    let conn = state.conn.lock().unwrap();
+    marcar_todas_leidas_logic(&conn)
 }
 
 // Comandos de movimientos de entrada

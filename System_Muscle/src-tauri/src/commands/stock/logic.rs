@@ -1,7 +1,5 @@
 use rusqlite::Connection;
-use crate::models::stock::stock::{
-    Stock, StockConProducto, AjusteStock, Notificacion, ProductoStockBajo,
-};
+use crate::models::stock::stock::{Stock, StockConProducto, AjusteStock, ProductoStockBajo};
 
 /// Obtiene el stock de un producto por su id_producto.
 pub fn obtener_stock_por_producto_logic(conn: &Connection, id_producto: i32) -> Result<Stock, String> {
@@ -122,69 +120,4 @@ pub fn listar_stock_bajo_logic(conn: &Connection) -> Result<Vec<ProductoStockBaj
     }
 
     Ok(lista)
-}
-
-/// Lista las notificaciones de stock bajo.
-/// Si `solo_no_leidas` es true, filtra estado = 0.
-pub fn listar_notificaciones_logic(
-    conn: &Connection,
-    solo_no_leidas: bool,
-) -> Result<Vec<Notificacion>, String> {
-    let query = if solo_no_leidas {
-        r#"SELECT n.id_notificacion, n.id_producto, p.nombre,
-                  n.mensaje, n.stock_actual, n.stock_minimo, n.fecha, n.estado
-           FROM notificaciones n
-           INNER JOIN productos p ON n.id_producto = p.id_producto
-           WHERE n.estado = 0
-           ORDER BY n.fecha DESC"#
-    } else {
-        r#"SELECT n.id_notificacion, n.id_producto, p.nombre,
-                  n.mensaje, n.stock_actual, n.stock_minimo, n.fecha, n.estado
-           FROM notificaciones n
-           INNER JOIN productos p ON n.id_producto = p.id_producto
-           ORDER BY n.fecha DESC"#
-    };
-
-    let mut stmt = conn.prepare(query).map_err(|e| e.to_string())?;
-
-    let rows = stmt
-        .query_map([], |row| {
-            Ok(Notificacion {
-                id_notificacion: row.get(0)?,
-                id_producto: row.get(1)?,
-                nombre_producto: row.get(2)?,
-                mensaje: row.get(3)?,
-                stock_actual: row.get(4)?,
-                stock_minimo: row.get(5)?,
-                fecha: row.get(6)?,
-                estado: row.get(7)?,
-            })
-        })
-        .map_err(|e| e.to_string())?;
-
-    let mut lista = Vec::new();
-    for item in rows {
-        lista.push(item.map_err(|e| e.to_string())?);
-    }
-
-    Ok(lista)
-}
-
-/// Marca una notificación con el estado dado (1: leída, 2: atendida).
-pub fn marcar_notificacion_logic(
-    conn: &Connection,
-    id_notificacion: i32,
-    estado: i32,
-) -> Result<(), String> {
-    if estado != 1 && estado != 2 {
-        return Err("Estado inválido. Use 1 (leída) o 2 (atendida)".to_string());
-    }
-
-    conn.execute(
-        "UPDATE notificaciones SET estado = ?1 WHERE id_notificacion = ?2",
-        rusqlite::params![estado, id_notificacion],
-    )
-    .map_err(|e| e.to_string())?;
-
-    Ok(())
 }

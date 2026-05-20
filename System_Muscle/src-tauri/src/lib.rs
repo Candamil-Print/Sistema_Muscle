@@ -53,8 +53,14 @@ pub fn run() {
             commands::listar_stock,
             commands::ajustar_stock,
             commands::listar_stock_bajo,
+            // Notificaciones
+            commands::obtener_notificacion,
             commands::listar_notificaciones,
+            commands::notificaciones_por_producto,
+            commands::notificaciones_por_estado,
+            commands::contar_notificaciones_no_leidas,
             commands::marcar_notificacion,
+            commands::marcar_todas_notificaciones_leidas,
             // Movimientos de entrada
             commands::registrar_entrada,
             commands::obtener_movimiento,

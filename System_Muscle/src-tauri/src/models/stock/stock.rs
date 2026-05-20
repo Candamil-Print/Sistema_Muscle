@@ -31,19 +31,6 @@ pub struct AjusteStock {
     pub stock_maximo: Option<i32>,
 }
 
-/// Struct notificación de stock bajo
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Notificacion {
-    pub id_notificacion: i32,
-    pub id_producto: i32,
-    pub nombre_producto: String,
-    pub mensaje: Option<String>,
-    pub stock_actual: Option<i32>,
-    pub stock_minimo: Option<i32>,
-    pub fecha: String,
-    pub estado: i32,   // 0: no leída, 1: leída, 2: atendida
-}
-
 /// Struct para el resultado de la vista vista_productos_stock_bajo
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ProductoStockBajo {
